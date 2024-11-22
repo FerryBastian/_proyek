@@ -6,7 +6,7 @@ import 'pages/homepage.dart';
 import 'authentication/login.dart';
 import 'authentication/register.dart';
 import 'pages/keranjang_page.dart'; // Add this line
-import 'pages/order.dart';
+import 'pages/payment.dart';
 
 
 void main() {
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(), // Register page
         '/details': (context) => Details(), // Add the Details page route here
         '/cart': (context) => CartPage(), // Add this line
-        '/order': (context) => OrderConfirmationPage(),
+        '/payment': (context) => PaymentPage(),
       },
     );
   }

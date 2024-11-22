@@ -31,6 +31,11 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearCart() {
+    _items.clear(); // Menghapus semua item dari keranjang
+    notifyListeners(); // Memperbarui UI
+  }
+
   double get totalPrice =>
       _items.fold(0.0, (total, current) => total + current.price);
 }

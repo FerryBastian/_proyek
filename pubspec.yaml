@@ -33,6 +33,8 @@ dependencies:
   sqflite: ^2.0.0+4
   path: ^1.8.3
   provider: ^6.1.2
+  qr_flutter: ^4.1.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -70,6 +72,7 @@ flutter:
     - assets/tumbler.jpeg
     - assets/payung.jpeg
     - assets/topi.jpeg
+    - assets/qr_code_image.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

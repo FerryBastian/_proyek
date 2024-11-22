@@ -31,7 +31,7 @@ class Menu extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "MENU",
+          "DEL SHOP",
           style: TextStyle(
             color: Color.fromARGB(255, 52, 65, 144),
             fontSize: 40,
@@ -43,31 +43,20 @@ class Menu extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
-            child: Icon(
-              Icons.search,
-              color: Color.fromARGB(255, 52, 65, 144),
-              size: 40,
+            child: IconButton(
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Color.fromARGB(255, 52, 65, 144),
+                size: 40,
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/cart');
+              },
             ),
-          )
+          ),
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
-        ],
-        selectedItemColor: Color.fromARGB(255, 52, 65, 144),
-        unselectedItemColor: Colors.grey,
       ),
       body: content(context, coffeeTitle, imagePaths, descriptions, prices),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed('/cart');
-        },
-        child: const Icon(Icons.shopping_cart),
-        backgroundColor: Color.fromARGB(255, 52, 65, 144),
-        tooltip: 'Go to Cart',
-      ),
     );
   }
 
@@ -179,4 +168,3 @@ class Menu extends StatelessWidget {
     );
   }
 }
-  
