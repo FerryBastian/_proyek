@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "777793287836",
+    "project_id": "delshop-fa6f7",
+    "storage_bucket": "delshop-fa6f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777793287836:android:9f53fbb5f95ca616535f59",
+        "android_client_info": {
+          "package_name": "com.example.delshop_flutter_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAm9Edcu8wiqRXircQC3ev5rnP_wfPssLk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
