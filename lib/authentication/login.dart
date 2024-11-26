@@ -1,133 +1,128 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../database/database_helper.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  // Menambahkan fungsi login untuk memverifikasi data pengguna
-  Future<void> _login() async {
-    final email = emailController.text;
-    final password = passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Email dan Kata Sandi tidak boleh kosong!')),
-      );
-      return;
-    }
-
-    // Memverifikasi apakah email dan password cocok dengan yang ada di database
-    final isValid = await DatabaseHelper().validateUser(email, password);
-
-    if (isValid) {
-      // Jika valid, pindah ke halaman menu
-      Navigator.of(context).pushNamed("/menu");
-    } else {
-      // Jika tidak valid, tampilkan pesan error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Email atau Kata Sandi salah!')),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 230, 230, 250), // Optional light background
-      body: Center(
+      appBar: AppBar(
+        title: const Text('Login'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Center(
-                child: Image.asset(
-                  'assets/logo.png',
-                  height: 100, // Adjust the height
-                  width: 100,  // Adjust the width
-                  fit: BoxFit.contain, // Ensures the aspect ratio is maintained
-                ),
-              ),
-), 
-            SizedBox(height: 30),
+            // Email input field
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            // Password input field
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            // Login button
+            ElevatedButton(
+              onPressed: () async {
+                await _login(context);
+              },
+              child: const Text('Login'),
+            ),
+            const SizedBox(height: 20),
+            // Registration buttons
             Text(
-              "DEL SHOP",
-              style: TextStyle(
-                color: const Color.fromARGB(255, 52, 65, 144),
-                fontSize: 45,
-                fontStyle: FontStyle.italic,
-              ),
+              "Register as:",
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 50),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/registerUser');
+                  },
+                  child: const Text('User'),
                 ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Kata Sandi",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/registerAdmin');
+                  },
+                  child: const Text('Admin'),
                 ),
-              ),
-            ),
-            SizedBox(height: 40),
-            GestureDetector(
-              onTap: _login, // Panggil fungsi login saat tombol Masuk ditekan
-              child: Container(
-                height: 50,
-                width: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: const Color.fromARGB(255, 52, 65, 144),
-                ),
-                child: Center(
-                  child: Text(
-                    "Masuk",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed("/register"),
-              child: Text(
-                "Belum punya akun? Daftar",
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 52, 65, 144),
-                  decoration: TextDecoration.underline,
-                ),
-              ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _login(BuildContext context) async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields!')),
+      );
+      return;
+    }
+
+    try {
+      // Authenticate with Firebase
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (userCredential.user != null) {
+        // Check the user role in Firestore
+        var userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .get();
+
+        if (userDoc.exists) {
+          String role = userDoc['role'];
+          // Navigate based on the role
+          if (role == 'admin') {
+            debugPrint('Navigating to Admin Page');
+            Navigator.pushReplacementNamed(context, '/adminPage');
+          } else if (role == 'user') {
+            debugPrint('Navigating to User Page');
+            Navigator.pushReplacementNamed(context, '/menu');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Invalid role.')),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('User data not found in the database.')),
+          );
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = '';
+      if (e.code == 'user-not-found') {
+        errorMessage = 'User not found.';
+      } else if (e.code == 'wrong-password') {
+        errorMessage = 'Incorrect password.';
+      } else {
+        errorMessage = 'An error occurred. Please try again.';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    }
   }
 }

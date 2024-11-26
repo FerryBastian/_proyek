@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/keranjang.dart'; // Pastikan file model keranjang sesuai
+import '../models/keranjang.dart';
 
 class Details extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   int _quantity = 1;
-  String _selectedSize = 'Medium';
+  String _selectedSize = '';
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +28,15 @@ class _DetailsState extends State<Details> {
         toolbarHeight: 100,
         elevation: 0,
       ),
-      body: content(context, productName, productImage, productPrice),
+      body: _content(context, productName, productImage, productPrice),
     );
   }
 
-  Widget content(BuildContext context, String productName, String productImage, double productPrice) {
+  Widget _content(BuildContext context, String productName, String productImage, double productPrice) {
     return SingleChildScrollView(
       child: Center(
         child: Column(
           children: [
-            // Product Image
             Container(
               width: double.infinity,
               height: 200,
@@ -45,7 +44,6 @@ class _DetailsState extends State<Details> {
               child: Image.asset(productImage),
             ),
             const SizedBox(height: 20),
-            // Product Details
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Column(
@@ -67,11 +65,18 @@ class _DetailsState extends State<Details> {
             const SizedBox(height: 80),
             GestureDetector(
               onTap: () {
+                if (_quantity <= 0 || _selectedSize.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Pilih ukuran dan jumlah produk terlebih dahulu!")),
+                  );
+                  return;
+                }
+
                 final cart = Provider.of<CartModel>(context, listen: false);
                 cart.addItem(CartItem(
                   name: productName,
                   quantity: _quantity,
-                  price: productPrice * _quantity, // Harga total
+                  price: productPrice * _quantity,
                   size: _selectedSize,
                   image: productImage,
                 ));
@@ -79,7 +84,7 @@ class _DetailsState extends State<Details> {
                   SnackBar(content: Text("Berhasil ditambahkan ke keranjang!")),
                 );
               },
-              child: submitButton("Add to Cart"),
+              child: _submitButton("Add to Cart"),
             ),
           ],
         ),
@@ -91,7 +96,6 @@ class _DetailsState extends State<Details> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Quantity Selector
         Row(
           children: [
             const Text("Jumlah", style: TextStyle(fontSize: 20, color: Colors.brown)),
@@ -116,7 +120,6 @@ class _DetailsState extends State<Details> {
           ],
         ),
         const SizedBox(height: 20),
-        // Size Selector
         const Text("Ukuran", style: TextStyle(fontSize: 20, color: Colors.brown)),
         Row(
           children: [
@@ -158,7 +161,7 @@ class _DetailsState extends State<Details> {
     );
   }
 
-  Widget submitButton(String text) {
+  Widget _submitButton(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
       decoration: BoxDecoration(

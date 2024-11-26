@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'models/keranjang.dart'; // Make sure the file location matches your project structure
-import 'pages/barang_details.dart'; // Import the Details page
-import 'pages/homepage.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:delshop_flutter_app/pages/homepage.dart';  // Mengimpor HomePage dari file yang benar
+import 'package:delshop_flutter_app/authentication/register.dart';  // Mengimpor RegisterPage dari file yang benar
+import 'firebase_options.dart';
+import 'models/item_provider.dart';
+import 'models/keranjang.dart';
+import 'admin/admin_page.dart';
 import 'authentication/login.dart';
-import 'authentication/register.dart';
-import 'pages/keranjang_page.dart'; // Add this line
+import 'authentication/register_admin.dart';
+import 'pages/barang_details.dart';
+import 'pages/keranjang_page.dart';
 import 'pages/payment.dart';
 
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CartModel()), // Using CartModel
+        ChangeNotifierProvider(create: (_) => ItemProvider()),
+        ChangeNotifierProvider(create: (_) => CartModel()),
       ],
       child: MyApp(),
     ),
@@ -25,18 +35,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter App',
+      title: 'DEL Shop App',
       theme: ThemeData(
-        primarySwatch: Colors.brown, // Brown color theme
+        primarySwatch: Colors.brown,
       ),
-      initialRoute: '/', // Start at LoginPage
+      initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(), // Login page
-        '/menu': (context) => Menu(), // Menu page
-        '/register': (context) => RegisterPage(), // Register page
-        '/details': (context) => Details(), // Add the Details page route here
-        '/cart': (context) => CartPage(), // Add this line
+        '/': (context) => LoginPage(),
+        '/menu': (context) => HomePage(),
+        '/registerUser': (context) => RegisterPage(),
+        '/details': (context) => Details(),
+        '/cart': (context) => CartPage(),
         '/payment': (context) => PaymentPage(),
+        '/registerAdmin': (context) => AdminRegisterPage(),
+        '/adminPage': (context) => AdminPage(), // Halaman Admin
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Error')),
+            body: const Center(child: Text('Halaman tidak ditemukan')),
+          ),
+        );
       },
     );
   }

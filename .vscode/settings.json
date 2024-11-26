@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "C:/dev/PROJECT PAM/delshop_flutter_app/windows"
+    "cmake.sourceDirectory": "C:/dev/PROJECT PAM/delshop_flutter_app/windows",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
