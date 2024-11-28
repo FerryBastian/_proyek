@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:delshop_flutter_app/pages/homepage.dart';  // Mengimpor HomePage dari file yang benar
-import 'package:delshop_flutter_app/authentication/register.dart';  // Mengimpor RegisterPage dari file yang benar
+import 'package:delshop_flutter_app/pages/homepage.dart';
+import 'package:delshop_flutter_app/authentication/register.dart';
 import 'firebase_options.dart';
 import 'models/item_provider.dart';
 import 'models/keranjang.dart';
@@ -13,6 +13,7 @@ import 'authentication/register_admin.dart';
 import 'pages/barang_details.dart';
 import 'pages/keranjang_page.dart';
 import 'pages/payment.dart';
+import 'pages/profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +49,8 @@ class MyApp extends StatelessWidget {
         '/cart': (context) => CartPage(),
         '/payment': (context) => PaymentPage(),
         '/registerAdmin': (context) => AdminRegisterPage(),
-        '/adminPage': (context) => AdminPage(), // Halaman Admin
+        '/adminPage': (context) => AdminPage(),
+        '/profile': (context) => ProfilePage(), // Halaman Profile
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(

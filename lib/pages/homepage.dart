@@ -67,44 +67,44 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // Menampilkan menu daftar dengan opsi Profil dan Logout
-  void _showMenu(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: const Text("Menu"),
-          children: [
-            SimpleDialogOption(
-              onPressed: () {
-                // Navigasi ke halaman profil user
-                Navigator.pushNamed(context, '/profile');
-                Navigator.of(context).pop();  // Menutup dialog
-              },
-              child: const Text("Profile"),
-            ),
-            SimpleDialogOption(
-              onPressed: () {
-                _logout(context);  // Logout dan arahkan ke halaman login
-                Navigator.of(context).pop();  // Menutup dialog
-              },
-              child: const Text("Logout"),
-            ),
-          ],
-        );
-      },
+ void _showMenu(BuildContext context) async {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return SimpleDialog(
+        title: const Text("Menu"),
+        children: [
+          SimpleDialogOption(
+            onPressed: () {
+              Navigator.of(context).pop();  // Menutup dialog terlebih dahulu
+              // Menambahkan navigasi ke halaman profile
+              Navigator.pushNamed(context, '/profile');  // Pastikan '/profile' sudah terdaftar di rute
+            },
+            child: const Text("Profile"),
+          ),
+          SimpleDialogOption(
+            onPressed: () {
+              Navigator.of(context).pop();  // Menutup dialog terlebih dahulu
+              _logout(context);  // Logout dan arahkan ke halaman login
+            },
+            child: const Text("Logout"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// Fungsi logout
+void _logout(BuildContext context) async {
+  try {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacementNamed(context, '/');  // Arahkan ke halaman login setelah logout
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Error during logout')),
     );
   }
+}
 
-  // Fungsi logout
-  void _logout(BuildContext context) async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacementNamed(context, '/');  // Arahkan ke halaman login setelah logout
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error during logout')),
-      );
-    }
-  }
 }
