@@ -24,44 +24,70 @@ class AdminPage extends StatelessWidget {
           ),
         ],
       ),
-      body: itemProvider.items.isEmpty
-          ? const Center(child: Text('Belum ada item. Tambahkan item baru.'))
-          : ListView.builder(
-              itemCount: itemProvider.items.length,
-              itemBuilder: (context, index) {
-                final item = itemProvider.items[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: ListTile(
-                    leading: Image.asset(item['image'], width: 50, fit: BoxFit.cover),
-                    title: Text(item['name']),
-                    subtitle: Text("Rp ${item['price'].toStringAsFixed(2)}"),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.blue),
-                          onPressed: () => _showForm(context, item: item),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            // Pastikan ID ada dan valid
-                            final itemId = item['id'];
-                            if (itemId != null) {
-                              print("Deleting item with ID: $itemId");  // Debugging ID sebelum delete
-                              itemProvider.deleteItem(itemId);
-                            } else {
-                              print("No ID found for item.");  // Jika ID kosong atau null
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+      body: Column(
+        children: [
+          // Button to navigate to the Transaction Page
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                // Navigate to the Transaction Page
+                Navigator.pushNamed(context, '/transaction'); // Make sure '/transaction' is the correct route for the TransactionPage
               },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                backgroundColor: Colors.brown,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              ),
+              child: const Text(
+                "Ke Halaman Transaksi",
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
             ),
+          ),
+          
+          // List of items
+          itemProvider.items.isEmpty
+              ? const Center(child: Text('Belum ada item. Tambahkan item baru.'))
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: itemProvider.items.length,
+                    itemBuilder: (context, index) {
+                      final item = itemProvider.items[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: ListTile(
+                          leading: Image.asset(item['image'], width: 50, fit: BoxFit.cover),
+                          title: Text(item['name']),
+                          subtitle: Text("Rp ${item['price'].toStringAsFixed(2)}"),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                onPressed: () => _showForm(context, item: item),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  final itemId = item['id'];
+                                  if (itemId != null) {
+                                    print("Deleting item with ID: $itemId");
+                                    itemProvider.deleteItem(itemId);
+                                  } else {
+                                    print("No ID found for item.");
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+        ],
+      ),
     );
   }
 

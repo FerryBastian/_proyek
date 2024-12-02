@@ -50,6 +50,14 @@ class RegisterPage extends StatelessWidget {
                   return;
                 }
 
+                // Check if email is a Gmail address
+                if (!_isGmail(email)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Hanya email Gmail yang diizinkan!')),
+                  );
+                  return;
+                }
+
                 if (password != confirmPassword) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Kata sandi tidak cocok!')),
@@ -109,5 +117,11 @@ class RegisterPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Function to validate if the email is a Gmail address
+  bool _isGmail(String email) {
+    final gmailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
+    return gmailRegex.hasMatch(email);
   }
 }
