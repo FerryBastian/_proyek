@@ -62,8 +62,11 @@ class CartPage extends StatelessWidget {
                       SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {
-                          // Navigate to the Summary page when checkout is pressed
-                          Navigator.of(context).pushNamed('/payment');
+                          // Navigate to the PaymentPage and pass the totalPrice as an argument
+                          Navigator.of(context).pushNamed(
+                            '/payment',
+                            arguments: cart.totalPrice, // Passing the total price here
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(255, 230, 230, 250),

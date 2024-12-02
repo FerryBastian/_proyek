@@ -10,36 +10,57 @@ class AdminRegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: const Color(0xFFEFF1FA), // Light background color
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Logo with smaller size
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Image.asset('assets/logo.png'),
+                child: Image.asset(
+                  'assets/logo.png',
+                  height: 100, // Reduced logo size
+                ),
               ),
               const SizedBox(height: 30),
+              
+              // Title Text with consistent style
               const Text(
                 "DAFTAR ADMIN",
                 style: TextStyle(
-                  color: Colors.brown,
-                  fontSize: 45,
+                  color: Colors.black87,  // Darker text color for better visibility
+                  fontSize: 40,
                   fontStyle: FontStyle.italic,
                 ),
               ),
               const SizedBox(height: 50),
+              
+              // Text Fields for Email, Password, and Confirm Password
               _buildTextField(emailController, "Email Admin"),
               const SizedBox(height: 20),
               _buildTextField(passwordController, "Kata Sandi Admin", obscureText: true),
               const SizedBox(height: 20),
               _buildTextField(confirmPasswordController, "Konfirmasi Kata Sandi", obscureText: true),
               const SizedBox(height: 40),
-              _buildSubmitButton(
-                context,
-                "Daftar Admin",
-                role: 'admin',
+
+              // Submit Button (Register Admin)
+              _buildSubmitButton(context, "Daftar Admin", role: 'admin'),
+              const SizedBox(height: 20),
+
+              // Redirect to Login page
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Kembali ke Login",
+                  style: TextStyle(
+                    color: Color(0xFF3E2723),  // Matching text color for consistency
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ],
           ),
@@ -56,6 +77,7 @@ class AdminRegisterPage extends StatelessWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
           labelText: label,
+          labelStyle: const TextStyle(color: Color(0xFF3E2723)),  // Consistent label color
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
       ),
@@ -72,7 +94,7 @@ class AdminRegisterPage extends StatelessWidget {
         width: 150,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.brown,
+          color: Color(0xFF3E2723),  // Dark brown button color matching login page
         ),
         child: Center(
           child: Text(

@@ -1,3 +1,4 @@
+import 'package:delshop_flutter_app/admin/transaksi.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -49,6 +50,10 @@ class MyApp extends StatelessWidget {
         '/payment': (context) => PaymentPage(),
         '/registerAdmin': (context) => AdminRegisterPage(),
         '/adminPage': (context) => AdminPage(), // Halaman Admin
+        '/transaction': (context) => TransaksiPage(
+          paymentImage: '',  // Pass an empty string for now
+          initialStatus: 'Pending',  // Use initialStatus instead of status
+        ),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
