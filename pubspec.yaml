@@ -34,6 +34,8 @@ dependencies:
   path: ^1.8.3
   provider: ^6.1.2
   image_picker: ^0.8.7+3
+  carousel_slider: ^4.2.1
+  
 
 
 
@@ -44,6 +46,7 @@ dependencies:
   firebase_auth: ^5.3.3
   cloud_firestore: ^5.5.0
   firebase_storage: ^12.3.6
+  
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +82,7 @@ flutter:
     - assets/topi.jpeg
     - assets/qr_code_image.jpg
     - assets/profile_image.png
+    - assets/person.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
