@@ -162,7 +162,7 @@ class RegisterPage extends StatelessWidget {
         const SnackBar(content: Text('Pendaftaran berhasil!')),
       );
 
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/');
     } on FirebaseAuthException catch (e) {
       String errorMessage;
       if (e.code == 'email-already-in-use') {
